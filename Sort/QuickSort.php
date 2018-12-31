@@ -2,7 +2,7 @@
 /*
  |-----------------------------------
  | 快速排序
- | 最好O(n log n) 最坏 O(n 2)
+ | 最好O(n log n) 最坏 O(n^2)
  |-----------------------------------
  | 以[1,4,3,2]为例子:
  | $flag           $left           $right
@@ -34,7 +34,7 @@ function QuickSort(array $arr){
 	}
 	$flag = $arr[0];
 	$left = $right = [];
-	for($i=1;$i<count($arr);$i++){
+	for($i=1;$i<count($arr);$i++){ //注意$i=1而不是0
 		if($flag < $arr[$i]){
 			$right[] = $arr[$i];
 		}else{
