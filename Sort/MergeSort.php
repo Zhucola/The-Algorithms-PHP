@@ -20,9 +20,11 @@ class MergeSort
     }
     public function mSort(&$arr, $left, $right)
     {
+        var_dump($left,$right);
         if ($left < $right) {
             $center = (int)floor(($left + $right) / 2);
             $this->mSort($arr, $left, $center);
+            die;
             $this->mSort($arr, $center + 1, $right);
             var_dump($left."---".$center."---".$right);
             $this->mergeArray($arr, $left, $center, $right);
