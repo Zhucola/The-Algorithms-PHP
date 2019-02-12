@@ -3,6 +3,7 @@
  |-----------------------------------
  | 快速排序
  | 最好O(n log n) 最坏 O(n^2)
+ | 最差情况是递归已经排序好的数组，可以每次选取随机键来排序
  |-----------------------------------
  | 以[1,4,3,2]为例子:
  | $flag           $left           $right
@@ -28,7 +29,7 @@
  | [1,2,3,4,6]
  | [1,2,3,4,6,11,22]
 */
-function QuickSort(array $arr){
+function QuickSort1(array $arr){
 	if(count($arr)<=1){
 		return $arr;
 	}
@@ -41,8 +42,29 @@ function QuickSort(array $arr){
 			$left[] = $arr[$i];
 		}
 	}
-	$left = QuickSort($left);
-	$right = QuickSort($right);
+	$left = QuickSort1($left);
+	$right = QuickSort1($right);
+	return array_merge($left,[$arr[0]],$right);
+}
+function QuickSort2(array $arr){
+	if(count($arr)<=1){
+		return $arr;
+	}
+	$index = mt_rand(0,count($arr) - 1);
+	$flag = $arr[$index];
+	$left = $right = [];
+	for($i=0;$i<count($arr);$i++){ 
+		if($i==$index){
+			continue;
+		}
+		if($flag < $arr[$i]){
+			$right[] = $arr[$i];
+		}else{
+			$left[] = $arr[$i];
+		}
+	}
+	$left = QuickSort2($left);
+	$right = QuickSort2($right);
 	return array_merge($left,[$arr[0]],$right);
 }
 $temp = [];
@@ -51,5 +73,5 @@ for($i=0;$i<1000;$i++){
 }
 $count = count($temp) + 1;
 ini_set("xdebug.max_nesting_level",$count);
-var_dump(QuickSort($temp));
+var_dump(QuickSort1($temp));
 ini_set("xdebug.max_nesting_level",256);
