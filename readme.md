@@ -27,3 +27,6 @@ function quickSort(Array $arr){
 	return array_merge($left,(array)$flag,$right);
 }
 ```
+|10万个随机数组|10万个升序数组|10万个降序数组|
+|:---|:---|:---|
+|平均0.013秒|报错(内存不够)|报错(内存不够)|
