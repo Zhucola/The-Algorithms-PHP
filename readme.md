@@ -6,6 +6,7 @@
 # 快速排序算法优化
 最基本的快排如下:
 ```
+<?php
 function quickSort(Array $arr){
 	$len = count($arr);
 	if($len <= 1){
