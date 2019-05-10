@@ -1,7 +1,8 @@
 <?php
 class DoublyLinkedList{
-	public $head = null;
-	public $tail = null;
+	public $head;
+	public $tail;
+	public $count = 0;
 	public function insertHead($data){
 		$node = new Node($data);
 		if($this->isEmpty()){
@@ -11,6 +12,7 @@ class DoublyLinkedList{
 		}
 		$node->next = $this->head;
 		$this->head = $node;
+		$this->count++;
 	}
 	public function insertTail($data){
 		$node = new Node($data);
