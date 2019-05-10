@@ -23,6 +23,7 @@ class DoublyLinkedList{
 		}
 		$node->previous = $this->tail;
 		$this->tail = $node;
+		$this->count++;
 	}
 	public function insertOrder($data){
 		if(!$this->isEmpty()){
@@ -40,6 +41,7 @@ class DoublyLinkedList{
 				$previous_tmp->next = $node;
 				$node->next = $tmp;
 				$node->previous = $previous_tmp;
+				$this->count++;
 			}
 		}else{
 			$this->insertHead($data);
@@ -54,6 +56,7 @@ class DoublyLinkedList{
 				$tmp->previous = null;
 			}
 			$this->head = $tmp;
+			$this->count--;
 		}
 	}
 	public function deleteTail(){
@@ -65,6 +68,7 @@ class DoublyLinkedList{
 				$tmp->next = null;
 			}
 			$this->tail = $tmp;
+			$this->count--;
 		}
 	}
 	public function delete($data){
@@ -82,17 +86,26 @@ class DoublyLinkedList{
 				$next = $tmp->next;
 				$previous->next = $next;
 				$next->previous = $previous;
+				$this->count--;
 			}
 		}
 	}
 	public function __toString(){
-		$res = "";
-		$node = $this->head;
-		while($node != null){
-			$res .= $node->data . "->";
-			$node = $node->next;
+		$head = $this->head;
+		$tail = $this->tail;
+		$head_arr = [];
+		$tail_arr = [];
+		for($i=0;$i<floor(($this->count/2));$i++){
+			$head_arr[] = $head->data;
+			array_unshift($tail_arr, $tail->data);
+			$head = $head->next;
+			$tail = $tail->previous;
 		}
-		$res = rtrim($res,"->");
+		if($this->count % 2 != 0){
+			$head_arr[] = $head->data;
+		}
+		$res = array_merge($head_arr,$tail_arr);
+		$res = implode($res, "->");
 		return $res;
 	}
 	public function isEmpty(){
@@ -108,11 +121,13 @@ class Node{
 	}
 }
 $s = new DoublyLinkedList();
-$s->insertHead(1);
+$s->insertHead(0);
 $s->insertHead(2);
-$s->delete(2);
+$s->insertHead(1);
+$s->insertTail(3);
+$s->insertTail(4);
 $s->insertTail(5);
-$s->insertTail(88);
-$s->insertOrder(200);
-$s->insertOrder(6);
+$s->insertTail(6);
+//$s->insertTail(4);
+//$s->reverse();
 echo $s;
