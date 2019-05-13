@@ -3,6 +3,7 @@ class DoublyLinkedList{
 	public $head;
 	public $tail;
 	public $count = 0;
+	//添加一个链表头
 	public function insertHead($data){
 		$node = new Node($data);
 		if($this->isEmpty()){
@@ -14,6 +15,7 @@ class DoublyLinkedList{
 		$this->head = $node;
 		$this->count++;
 	}
+	//添加一个链表尾
 	public function insertTail($data){
 		$node = new Node($data);
 		if($this->isEmpty()){
@@ -111,6 +113,20 @@ class DoublyLinkedList{
 	public function isEmpty(){
 		return $this->head == null;
 	}
+	public function reverse(){
+		$tmp = null;
+		$current = $this->head;
+		$this->tail = $this->head;
+		while($current != null){
+			$tmp = $current->previous;
+			$current->previous = $current->next;
+			$current->next = $tmp;
+			$current = $current->previous;
+		}
+		if($tmp != null){
+			$this->head = $tmp->previous;
+		}
+	}
 }
 class Node{
 	public $next = null;
@@ -124,10 +140,9 @@ $s = new DoublyLinkedList();
 $s->insertHead(0);
 $s->insertHead(2);
 $s->insertHead(1);
-$s->insertTail(3);
 $s->insertTail(4);
-$s->insertTail(5);
-$s->insertTail(6);
-//$s->insertTail(4);
-//$s->reverse();
+$s->reverse();
+echo $s;
+$s->reverse();
+echo "<br/>";
 echo $s;
