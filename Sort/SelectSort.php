@@ -1,16 +1,39 @@
 <?php
-function SelectSort(Array $arr){
-	for($i=0,$k=$i,$len=count($arr);$i<$len;$i++){
-		for($j=$i+1;$j<$len;$j++){
-			if($arr[$j] < $arr[$k]){
-				$k = $j;
+class SelectSort extends Base{
+	public function sort(){
+		for($i=0;$i<$this->count-1;$i++){
+			$min = $i;
+			for($j=$i+1;$j<$this->count;$j++){
+				if($this->less($this->arr[$min],$this->arr[$j])){
+					$min = $j;
+				}
+			}
+			if($min != $i){
+				$this->swap($i,$min);
 			}
 		}
-		if($k!=$i){
-			$temp = $arr[$i];
-			$arr[$i] = $arr[$k];
-			$arr[$k] = $temp;
+	}
+}
+
+function SelectSortFunc(Array $arr){
+	$count = count($arr);
+	for($i=0;$i<$count-1;$i++){
+		$min = $i;
+		for($j=$i+1;$j<$count;$j++){
+			if($arr[$min]>$arr[$j]){
+				$min = $j;
+			}
+		}
+		if($min != $i){
+			$tmp = $arr[$min];
+			$arr[$i] = $arr[$min];
+			$arr[$min] = $tmp;
 		}
 	}
-	return $arr;
 }
+
+$sort = new SelectSort(10000);
+$sort->sort();
+var_dump($sort->elapsedTime());
+var_dump($sort->check());
+var_dump($sort->arr);
