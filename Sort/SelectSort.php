@@ -1,4 +1,5 @@
 <?php
+include("./Base.php");
 class SelectSort extends Base{
 	public function sort(){
 		for($i=0;$i<$this->count-1;$i++){
@@ -34,6 +35,6 @@ function SelectSortFunc(Array $arr){
 
 $sort = new SelectSort(10000);
 $sort->sort();
-var_dump($sort->elapsedTime());
+$sort->elapsedTime();
 var_dump($sort->check());
 var_dump($sort->arr);

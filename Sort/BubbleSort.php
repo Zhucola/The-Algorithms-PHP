@@ -1,25 +1,39 @@
 <?php
+include("./Base.php");
 /*
- |--------------------------------------------------------------
- | 冒泡排序
- | 时间复杂度O(n^2)
- |--------------------------------------------------------------
- | 属于1+2+3+...+n = n(n+1)/2
- |
-*/
-
-$arr = [6,7,12,34,54,11,23,87,54,43,1,2,9,6,160,123];
-function BubbleSort($arr){
-	for($x=0,$len=count($arr);$x<$len-1;$x++){
-		for($y=0;$y<$len-$x-1;$y++){
-			if($arr[$y]>$arr[$y+1]){
-				$temp = $arr[$y];
-				$arr[$y] = $arr[$y+1];
-				$arr[$y+1] = $temp;
+ * 冒泡排序
+ * 对于部分段有序的部分，还是要进行比较，并且数组交换次数较多
+ *
+ */
+class BubbleSort extends Base{
+	public function sort(){
+		for($i=0;$i<$this->count-1;$i++){
+			for($j=0;$j<$this->count-$i-1;$j++){
+				if($this->less($this->arr[$j],$this->arr[$j+1])){
+					$this->swap($j,$j+1);
+				}
+			}
+		}
+	}
+}
+function BubbleSortFunc(Array $arr){
+	$count = count($arr);
+	for($i=0;$i<$count-1;$i++){
+		for($j=0;$j<$count-$i-1;$j++){
+			if($arr[$j] > $arr[$j+1]){
+				$tmp = $arr[$j];
+				$arr[$j] = $arr[$j+1];
+				$arr[$j+1] = $tmp;
 			}
 		}
 	}
 	return $arr;
 }
-$res = BubbleSort($arr);
+$sort = new BubbleSort(10);
+$arr = $sort->arr;
+$sort->sort();
+$sort->elapsedTime();
+var_dump($sort->check());
+var_dump($sort->arr);
+$res = BubbleSortFunc($arr);
 var_dump($res);
