@@ -9,24 +9,23 @@
                 mSort($arr,0,1)     mSort($arr,2,2)         mSort($arr,3,3)  mSort($arr,4,4)
                       |
             --------------------------
-        mSort($arr,0,0) mSort($arr,1,1)                            
+        mSort($arr,0,0) mSort($arr,1,1)      
+        将任意长度为N的数组排序所需时间和NlogN成正比，缺点是需要的空间和N成正比
+        将一个数组排序，可以先递归的将他们分成两半分别排序，然后将结果归并起来
+        将一个大数组排序，需要进行很多次归并，每次归并都需要创建一个新数组                      
 */
 class MergeSort
 {
     public function __construct(array $arr)
     {
         $this->mSort($arr, 0, count($arr) - 1);
-        var_dump($arr);
     }
     public function mSort(&$arr, $left, $right)
     {
-        var_dump($left,$right);
         if ($left < $right) {
             $center = (int)floor(($left + $right) / 2);
             $this->mSort($arr, $left, $center);
-            die;
             $this->mSort($arr, $center + 1, $right);
-            var_dump($left."---".$center."---".$right);
             $this->mergeArray($arr, $left, $center, $right);
         }
     }
