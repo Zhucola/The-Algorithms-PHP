@@ -21,7 +21,7 @@ class SelectSort extends Base{
 	}
 }
 
-function SelectSortFunc(Array $arr){
+function SelectSortFunc1(Array $arr){
 	$count = count($arr);
 	for($i=0;$i<$count-1;$i++){
 		$min = $i;
@@ -37,7 +37,34 @@ function SelectSortFunc(Array $arr){
 		}
 	}
 }
-
+function SelectSortFunc2(Array $arr){
+	$count = count($arr);
+	for($left=0,$right=$count-1;$left<$right;$left++,$right--){
+		$min = $left;
+		$max = $right;
+		for($i=$left;$i<=$right;$i++){
+			if($arr[$i] < $arr[$min]){
+				$min = $i;
+			}elseif($arr[$i] > $arr[$max]){
+				$max = $i;
+			}
+		}
+		if($min != $left){	
+			$tmp = $arr[$min];
+			$arr[$min] = $arr[$left];
+			$arr[$left] = $tmp;
+		}	
+		if($max == $left){//因为$arr[$left]值已经改变了
+			$max = $min;
+		}
+		if($max != $right){
+			$tmp = $arr[$max];
+			$arr[$max] = $arr[$right];
+			$arr[$right] = $tmp;
+		}
+	}
+	return $arr;
+}
 $sort = new SelectSort(10000);
 $sort->sort();
 $sort->elapsedTime();
