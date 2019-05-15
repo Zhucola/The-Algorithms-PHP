@@ -1,5 +1,24 @@
 <?php
-function InsertSort(array $arr){
+include("./Base.php");
+/*
+ * 插入排序
+ * 对于部分段有序的部分，不需要进行比较
+ *
+ */
+class InsertSort extends Base{
+    public function sort(){
+        for($i=1;$i<$this->count;$i++){
+            $j = $i - 1;
+            $tmp = $this->arr[$i];
+            while($j>=0&&$this->less($this->arr[$j],$tmp)){
+                $this->arr[$j+1] = $this->arr[$j];
+                $j--;
+            }
+            $this->arr[$j+1] = $tmp;
+        }
+    }
+}
+function InsertSortFunc(array $arr){
     $len = count($arr);
     for($i=1;$i<$len;$i++){
         $temp = $arr[$i];
@@ -8,16 +27,13 @@ function InsertSort(array $arr){
             $arr[$j+1] = $arr[$j];
             $j--;
         }
-        if($i != $j+1) 
-            $arr[$j+1] = $temp;
+        $arr[$j+1] = $temp;
     }
     return $arr;
 }
-$temp = [];
-for($i=0;$i<1000;$i++){
-    $temp[] = mt_rand(0,10000);
-}
-$count = count($temp) + 1;
-ini_set("xdebug.max_nesting_level",$count);
-var_dump(InsertSort($temp));
-ini_set("xdebug.max_nesting_level",256);
+$sort = new InsertSort(1000);
+$arr = $sort->arr;
+$sort->sort();
+$sort->elapsedTime();
+var_dump($sort->check());
+var_dump($sort->arr);
