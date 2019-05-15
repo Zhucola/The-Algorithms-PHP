@@ -2,7 +2,7 @@
 include("./Base.php");
 /*
  * 插入排序
- * 对于部分段有序的部分，不需要进行比较
+ * 对于部分段有序的部分，不需要进行比较,每次循环数组左面是有序的
  *
  */
 class InsertSort extends Base{
