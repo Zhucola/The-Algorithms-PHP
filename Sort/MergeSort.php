@@ -1,60 +1,88 @@
 <?php
-/*
-                                            mSort($arr,0,4)
-                                                 |
-                            ---------------------------------------------
-                        mSort($arr,0,2)                           mSort($arr,3,4)
-                             |                                          |
-                   -------------------------------------------------------------------------
-                mSort($arr,0,1)     mSort($arr,2,2)         mSort($arr,3,3)  mSort($arr,4,4)
-                      |
-            --------------------------
-        mSort($arr,0,0) mSort($arr,1,1)      
-        将任意长度为N的数组排序所需时间和NlogN成正比，缺点是需要的空间和N成正比
-        将一个数组排序，可以先递归的将他们分成两半分别排序，然后将结果归并起来
-        将一个大数组排序，需要进行很多次归并，每次归并都需要创建一个新数组                      
-*/
-class MergeSort
+include("./Base.php");
+final class mergeSort1 extends Base
 {
-    public function __construct(array $arr)
-    {
-        $this->mSort($arr, 0, count($arr) - 1);
+    public function __construct($count){
+        parent::__construct($count);
+        $this->mSort(0,$this->count-1);
     }
-    public function mSort(&$arr, $left, $right)
+
+    private function mSort($left,$right)
     {
-        if ($left < $right) {
-            $center = (int)floor(($left + $right) / 2);
-            $this->mSort($arr, $left, $center);
-            $this->mSort($arr, $center + 1, $right);
-            $this->mergeArray($arr, $left, $center, $right);
+        if($left<$right){
+            $center = (int)floor(($left+$right)/2);
+            $this->mSort($left,$center);
+            $this->mSort($center+1,$right);
+            $this->merge($left,$center,$right);
         }
     }
-    public function mergeArray(&$arr, $left, $center, $right) //0 0 1
+    private function merge($left,$center,$right)
     {
-        //设置两个起始位置标记
-        $a_i  = $left;
-        $b_i  = $center + 1;
-        $temp = [];
-        while ($a_i <= $center && $b_i <= $right) {
-            //当数组A和数组B都没有越界时
-            if ($arr[ $a_i ] < $arr[ $b_i ]) {
-                $temp[] = $arr[ $a_i++ ];
-            } else {
-                $temp[] = $arr[ $b_i++ ];
+        $min = $left;
+        $max = $center + 1;
+        //归并排序最大的问题就是空间复杂度，所需要的空间和N成正比
+        $tmp = [];
+        while($min <= $center && $max <= $right){
+            if($this->less($this->arr[$max],$this->arr[$min])){
+                $tmp[] = $this->arr[$min++];
+            }else{
+                $tmp[] = $this->arr[$max++];
             }
         }
-        //判断 数组A内的元素是否都用完了，没有的话将其全部插入到C数组内：
-        while ($a_i <= $center) {
-            $temp[] = $arr[ $a_i++ ];
+        while($min<=$center){
+            $tmp[] = $this->arr[$min++];
         }
-        //判断 数组B内的元素是否都用完了，没有的话将其全部插入到C数组内：
-        while ($b_i <= $right) {
-            $temp[] = $arr[ $b_i++ ];
+        while($max<=$right){
+            $tmp[] = $this->arr[$max++];
         }
-        //将$arrC内排序好的部分，写入到$arr内：
-        for ($i = 0, $len = count($temp); $i < $len; $i++) {
-            $arr[ $left + $i ] = $temp[ $i ];
+        for($i=0;$i<count($tmp);$i++){
+            $this->arr[$left+$i] = $tmp[$i];
         }
     }
 }
-new mergeSort([3,1,2,4,5]);
+
+//原地归并优化
+final class mergeSort2 extends Base
+{
+    public $tmp = [];
+    public function __construct($count){
+        parent::__construct($count);
+        $this->mSort(0,$this->count-1);
+    }
+
+    private function mSort($left,$right)
+    {
+        if($left<$right){
+            $center = (int)floor(($left+$right)/2);
+            $this->mSort($left,$center);
+            $this->mSort($center+1,$right);
+            $this->merge($left,$center,$right);
+        }
+    }
+    private function merge($left,$center,$right)
+    {
+        $min = $left;
+        $max = $center + 1;
+        for($i=$left;$i<=$right;$i++){
+            $this->tmp[$i] = $this->arr[$i];
+        }
+        for($j=$left;$j<=$right;$j++){
+            if($min>$center){
+                $this->arr[$j] = $this->tmp[$max++];
+            }elseif($max>$right){
+                $this->arr[$j] = $this->tmp[$min++];
+            }elseif($this->less($this->tmp[$min],$this->tmp[$max])){
+                $this->arr[$j] = $this->tmp[$max++];
+            }else{
+                $this->arr[$j] = $this->tmp[$min++];
+            }
+        }
+    }
+}
+$sort = new mergeSort1(10000);
+var_dump($sort->check());
+$sort->elapsedTime();
+
+$sort = new mergeSort2(10000);
+var_dump($sort->check());
+$sort->elapsedTime();
