@@ -19,10 +19,10 @@ class SinglyLinkedList{
 		if($checkLoop && $this->hasLoop()){
 			$current->next = null;
 		}else{
-			// while($node != null){
-			// 	$this->count++;
-			// 	$node = $node->next;
-			// }
+			while($node != null){
+				$this->count++;
+				$node = $node->next;
+			}
 		}
 	}
 	//删除链表头元素

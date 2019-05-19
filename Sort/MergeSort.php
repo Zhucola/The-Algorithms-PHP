@@ -1,4 +1,23 @@
 <?php
+/*
+    归并长度为15的数组
+    左面
+        mSort(0,7)
+         mSort(0,3)
+          mSort(0,1)
+          merge(0,0,1)
+         mSort(2,3)
+         merge(2,2,3)
+         merge(0,1,3)
+        mSort(4,7)
+         mSort(4,5)
+          merge(4,4,5)
+        mSort(6,7)
+         merge(6,6,7)
+        merge(4,5,7)
+        merge(0,3,7)
+    右面以此类推
+*/
 include("./Base.php");
 final class mergeSort1 extends Base
 {
@@ -71,7 +90,7 @@ final class mergeSort2 extends Base
                 $this->arr[$j] = $this->tmp[$max++];
             }elseif($max>$right){
                 $this->arr[$j] = $this->tmp[$min++];
-            }elseif($this->less($this->tmp[$min],$this->tmp[$max])){
+            }elseif($this->less($this->tmp[$max],$this->tmp[$max])){
                 $this->arr[$j] = $this->tmp[$max++];
             }else{
                 $this->arr[$j] = $this->tmp[$min++];
@@ -79,9 +98,9 @@ final class mergeSort2 extends Base
         }
     }
 }
-$sort = new mergeSort1(10000);
-var_dump($sort->check());
-$sort->elapsedTime();
+// $sort = new mergeSort1(10000);
+// var_dump($sort->check());
+// $sort->elapsedTime();
 
 $sort = new mergeSort2(10000);
 var_dump($sort->check());
