@@ -98,6 +98,39 @@ final class mergeSort2 extends Base
         }
     }
 }
+//自底向上优化
+class merge{
+    public $arr;
+    public function __construct(Array $arr){
+        $this->arr = $arr;
+        for($i=1;$i<count($arr);$i=2*$i){
+            for($j=0;$j<count($arr)-$i;$j+=2*$i){
+                $this->merge($j,$j+$i-1,min($j+2*$i-1,count($arr)-1));
+            }
+        }
+    }
+    private function merge($left,$center,$right){
+        $min = $left;
+        $max = $center+1;
+        $tmp = [];
+        while($min<=$center && $max<=$right){
+            if($this->arr[$min]<$this->arr[$max]){
+                $tmp[] = $this->arr[$min++];
+            }else{
+                $tmp[] = $this->arr[$max++];
+            }
+        }
+        while($min<=$center){
+            $tmp[] = $this->arr[$min++];
+        }
+        while($max<=$right){
+            $tmp[] = $this->arr[$max++];
+        }
+        for($i=0;$i<count($tmp);$i++){
+            $this->arr[$left+$i] = $tmp[$i];
+        }
+    }
+}
 // $sort = new mergeSort1(10000);
 // var_dump($sort->check());
 // $sort->elapsedTime();
