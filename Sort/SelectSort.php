@@ -32,10 +32,11 @@ function SelectSortFunc1(Array $arr){
 		}
 		if($min != $i){
 			$tmp = $arr[$min];
-			$arr[$i] = $arr[$min];
-			$arr[$min] = $tmp;
+			$arr[$min] = $arr[$i];
+			$arr[$i] = $tmp;
 		}
 	}
+	return $arr;
 }
 function SelectSortFunc2(Array $arr){
 	$count = count($arr);
