@@ -192,22 +192,24 @@ class SinglyLinkedList{
 	}
 	//在不知道链表长度的情况下，查出倒数第N个节点
 	public function findLastNode($position){
-		if($this->isEmpty() || $position == 0){
-			return null;
-		}
-		$first = $this->head;
-		$second = $this->head;
-		for($i=0;$i<$position;$i++){
-			if($second == null){
-				return null;
-			}
-			$second = $second->next;
-		}
-		while($second != null){
-			$second = $second->next;
-			$first = $first->next;
-		}
-		return $first;
+		if($position<=0){
+            return null;
+        }
+        $slow = $fast = $this->head;
+        for($i=0;$i<$position;$i++){
+            if($fast->next == null){
+                if($position-$i == 1){
+                    return $this->head->data;
+                }
+                return null;
+            }
+            $fast = $fast->next;
+        }
+        while($fast != null){
+            $fast = $fast->next;
+            $slow = $slow->next;
+        }
+        return $slow->data;
 	}
 	//合并两个有序的单链表，合并之后还是有序
 	public static function mergeLinkList(Node $node1,Node $node2){
