@@ -70,7 +70,7 @@ class SinglyLinkedList{
 	}
 	//删除链表中的指定位置
 	public function deleteNth($position){
-		if($position < 0 || $position > $this->count){
+		if($position < 0 || $position > $this->count-1){
 			return false;
 		}elseif($position == 0){
 			$this->deleteHead();
@@ -259,7 +259,7 @@ class SinglyLinkedList{
 		$echo = rtrim($echo,"->");
 		echo $echo;
 	}
-	//删除一个给定的节点，该节点在链表中，时间复杂度Ohttp://eiptech.aspirecn.com/default.aspx(1)
+	//删除一个给定的节点，该节点在链表中，时间复杂度O(1) http://eiptech.aspirecn.com/default.aspx
 	public static function deleteNode(Node $head,Node $node){
 		if($node->next != null){//删除的不是尾节点
 			$tmp = $node->next;
