@@ -67,6 +67,36 @@ function QuickSort2(array $arr){
 	$right = QuickSort2($right);
 	return array_merge($left,[$arr[0]],$right);
 }
+function quickSort3($arr){
+    $count = count($arr);
+    if($count <= 1){
+        return $arr;
+    }elseif($count <= 7){
+    	//小的数组插入排序比快排性能更好
+        for($i=1;$i<$count;$i++){
+            $j=$i-1;
+            $tmp = $arr[$i];
+            while($j>=0 && ($arr[$j]>$tmp)){
+                $arr[$j+1] = $arr[$j];
+                $j--;
+            }
+            $arr[$j+1] = $tmp;
+        }
+        return $arr;
+    }
+    $flag = $arr[0];
+    $left = $right = [];
+    for($i=1;$i<$count;$i++){
+        if($arr[$i]<$flag){
+            $left[] = $arr[$i];
+        }else{
+            $right[] = $arr[$i];
+        }
+    }
+    $left = quickSort3($left);
+    $right = quickSort3($right);
+    return array_merge($left,(array)$flag,$right);
+}
 $temp = [];
 for($i=0;$i<1000;$i++){
 	$temp[] = mt_rand(0,1000);

@@ -131,7 +131,6 @@ class SinglyLinkedList{
 	}
 	//求环的长度
 	public function getCycleLength(){
-		var_dump($this->findLoopStart());die;
 		if(($start = $this->findLoopStart()) != false){
 			$length = 0;
 			$tmp = $start;
@@ -145,6 +144,7 @@ class SinglyLinkedList{
 		}
 		return false;
 	}
+	
 	//判断是否有环
 	public function hasLoop(){
 		$slow = $this->head;

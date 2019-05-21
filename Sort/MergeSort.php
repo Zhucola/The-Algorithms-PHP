@@ -90,7 +90,7 @@ final class mergeSort2 extends Base
                 $this->arr[$j] = $this->tmp[$max++];
             }elseif($max>$right){
                 $this->arr[$j] = $this->tmp[$min++];
-            }elseif($this->less($this->tmp[$max],$this->tmp[$max])){
+            }elseif($this->less($this->tmp[$min],$this->tmp[$max])){
                 $this->arr[$j] = $this->tmp[$max++];
             }else{
                 $this->arr[$j] = $this->tmp[$min++];
@@ -115,6 +115,44 @@ class merge{
         $tmp = [];
         while($min<=$center && $max<=$right){
             if($this->arr[$min]<$this->arr[$max]){
+                $tmp[] = $this->arr[$min++];
+            }else{
+                $tmp[] = $this->arr[$max++];
+            }
+        }
+        while($min<=$center){
+            $tmp[] = $this->arr[$min++];
+        }
+        while($max<=$right){
+            $tmp[] = $this->arr[$max++];
+        }
+        for($i=0;$i<count($tmp);$i++){
+            $this->arr[$left+$i] = $tmp[$i];
+        }
+    }
+}
+class m{
+    public $arr;
+    public function __construct($arr){
+        $this->arr = $arr;
+        $this->doSort(0,count($arr)-1);
+    }
+    public function doSort($left,$right){
+        if($left<$right){
+            $center = (int)(floor($left+$right)/2);
+            $this->doSort($left,$center);
+            $this->doSort($center+1,$right);
+            if($this->arr[$center]>$this->arr[$center+1]){
+                $this->merge($left,$center,$right);
+            }
+        }
+    }
+    public function merge($left,$center,$right){
+        $min = $left;
+        $max = $center+1;
+        $tmp = [];
+        while($min<=$center && $max<=$right){
+            if($this->arr[$min] < $this->arr[$max]){
                 $tmp[] = $this->arr[$min++];
             }else{
                 $tmp[] = $this->arr[$max++];
