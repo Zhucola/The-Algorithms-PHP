@@ -35,6 +35,7 @@ class Heap{
     public function insert($val){
         $this->arr[$this->count] = $val;
         $this->count++;
+        //将被插入元素放到末尾，然后上浮
         $this->swim($this->count-1);
     }
 
