@@ -79,6 +79,23 @@ class BST{
 			return $node->val;
 		}
 	}
+	//求树的深度
+	public function getMaxDepth($node = null ){
+		if($node == null){
+			return $this->doGetMaxDepth($this->root);
+		}else{
+			return $this->doGetMaxDepth($node);
+		}
+	}
+	private function doGetMaxDepth($node){
+		if($node == null){
+			return 0;
+		}else{
+			$left = $this->doGetMaxDepth($node->left);
+			$right = $this->doGetMaxDepth($node->right);
+			return 1+max($left,$right);
+		}
+	}
 }
 class Node{
 	public $key; //键
