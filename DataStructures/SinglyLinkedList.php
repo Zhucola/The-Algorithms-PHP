@@ -76,7 +76,7 @@ class SinglyLinkedList{
 			$this->deleteHead();
 		}else{
 			$current = $this->head;
-			for($i=0;$i<$position-1;$i++){
+			for($i=0;$i<$position-2;$i++){
 				$current = $current->next;
 			}
 			$current->next = $current->next->next;
@@ -192,24 +192,22 @@ class SinglyLinkedList{
 	}
 	//在不知道链表长度的情况下，查出倒数第N个节点
 	public function findLastNode($position){
-		if($position<=0){
-            return null;
-        }
-        $slow = $fast = $this->head;
-        for($i=0;$i<$position;$i++){
-            if($fast->next == null){
-                if($position-$i == 1){
-                    return $this->head->data;
-                }
-                return null;
-            }
-            $fast = $fast->next;
-        }
-        while($fast != null){
-            $fast = $fast->next;
-            $slow = $slow->next;
-        }
-        return $slow->data;
+		if($position<1){
+			return 0;
+		}
+		$slow  = $fast = $this->head;
+		for($i=0;$i<$position-1;$i++){
+			if($fast->next != null){
+				$fast = $fast->next;
+			}else{
+				return null;
+			}
+		}
+		while($fast->next != null){
+			$fast = $fast->next;
+			$slow = $slow->next;
+		}
+		return $slow->data;
 	}
 	//合并两个有序的单链表，合并之后还是有序
 	public static function mergeLinkList(Node $node1,Node $node2){
@@ -264,9 +262,8 @@ class SinglyLinkedList{
 	//删除一个给定的节点，该节点在链表中，时间复杂度O(1) http://eiptech.aspirecn.com/default.aspx
 	public static function deleteNode(Node $head,Node $node){
 		if($node->next != null){//删除的不是尾节点
-			$tmp = $node->next;
-			$node->data = $tmp->data;
-			$node->next = $tmp->next;
+			$node->data = $node->next->data;
+			$node->next = $node->next->next;
 		}elseif($node == $head){ //链表只有一个节点
 			$head = null;
 		}else{ //删除尾节点

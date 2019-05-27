@@ -96,6 +96,28 @@ class BST{
 			return 1+max($left,$right);
 		}
 	}
+	//找最小的键
+	public function min(){
+		return $this->doMin($this->root)->val;
+	}
+	private function doMin($node){
+		if($node->left == null){
+			return $node;
+		}
+		return $this->doMin($node->left);
+	}
+
+	//二叉树转数组
+	private $print_tmp = [];
+	public function print($node){
+		if($node == null){
+			return;
+		}
+		$this->print($node->left);
+		$this->print_tmp[$node->key] = $node->val;
+		$this->print($node->right);
+		return $this->print_tmp;
+	}
 }
 class Node{
 	public $key; //键
