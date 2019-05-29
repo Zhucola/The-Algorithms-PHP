@@ -92,6 +92,10 @@ class HeapSort2{
         while($i--){
             $this->buildHeap($i,$this->count);
         }
+        while($this->count){
+            $this->swap(0,--$this->count);
+            $this->buildHeap(0,$this->count);
+        }
     }
     private function buildHeap($i,$count){
         if($i>=$count){
@@ -114,7 +118,7 @@ class HeapSort2{
 
     }
     private function less($i,$j){
-        return $this->arr[$i] < $this->arr[$j];
+        return $this->arr[$i] > $this->arr[$j];
     }
     private function swap($i,$j){
         $tmp = $this->arr[$i];
