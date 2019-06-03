@@ -11,7 +11,6 @@
     5(位置2)      6(位置3)
 3(位置4)   4(位置5)
 */
-
 class HeapSort1{
     const ORDER_ASC = 0;
     const ORDER_DESC = 1;
