@@ -107,17 +107,61 @@ class BST{
 		return $this->doMin($node->left);
 	}
 
-	//二叉树转数组
-	private $print_tmp = [];
-	public function print($node){
-		if($node == null){
-			return;
-		}
-		$this->print($node->left);
-		$this->print_tmp[$node->key] = $node->val;
-		$this->print($node->right);
-		return $this->print_tmp;
-	}
+	//二叉树转数组，中序遍历(先打印它的左子树，然后再打印它本身，最后打印它的右子树)
+    private $print_tmp = [];
+    public function printMiddle($node = null){
+        $this->print_tmp = [];
+        if($node == null){
+            return $this->doPrintMiddle($this->root);
+        }else{
+            return $this->doPrintMiddle($node);
+        }
+    }
+    private function doPrintMiddle($node){
+        if($node == null){
+            return;
+        }
+        $this->doPrintMiddle($node->left);
+        $this->print_tmp[$node->key] = $node->val;
+        $this->doPrintMiddle($node->right);
+        return $this->print_tmp;
+    }
+    //二叉树转数组，前序遍历(先打印这个节点，然后再打印它的左子树，最后打印它的右子树)
+    public function printHead($node = null){
+        $this->print_tmp = [];
+        if($node == null){
+            return $this->doPrintHead($this->root);
+        }else{
+            return $this->doPrintHead($node);
+        }
+    }
+    private function doPrintHead($node){
+        if($node == null){
+            return;
+        }
+        $this->print_tmp[$node->key] = $node->val;
+        $this->doPrintHead($node->left);
+        $this->doPrintHead($node->right);
+        return $this->print_tmp;
+    }
+    //二叉树转数组，后序遍历(先打印它的左子树，然后再打印它的右子树，最后打印这个节点本身)
+    public function printBehind($node = null){
+        $this->print_tmp = [];
+        if($node == null){
+            return $this->doPrintBehind($this->root);
+        }else{
+            return $this->doPrintBehind($node);
+        }
+    }
+    private function doPrintBehind($node){
+        if($node == null){
+            return;
+        }
+        $this->doPrintBehind($node->left);
+        $this->doPrintBehind($node->right);
+        $this->print_tmp[$node->key] = $node->val;
+        return $this->print_tmp;
+    }
 }
 class Node{
 	public $key; //键
