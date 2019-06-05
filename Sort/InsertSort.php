@@ -3,7 +3,8 @@ include("./Base.php");
 /*
  * 插入排序
  * 对于部分段有序的部分，不需要进行比较,每次循环数组左面是有序的
- *
+ * 时间复杂度
+ *  最坏O(n^2)  最好O(n)
  */
 class InsertSort extends Base{
     public function sort(){
