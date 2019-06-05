@@ -3,6 +3,8 @@ include("./Base.php");
 /*
  * 选择排序
  * 对于部分段有序的部分，还是要进行比较，数组交换次数比冒泡排序要少，每次循环只要交换一次就可以
+ * 时间复杂度:
+ *   O(n^2)
  *
  */
 class SelectSort extends Base{
