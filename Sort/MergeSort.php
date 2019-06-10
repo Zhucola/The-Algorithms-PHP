@@ -17,6 +17,11 @@
         merge(4,5,7)
         merge(0,3,7)
     右面以此类推
+
+    时间复杂度:
+        O(nlogn)
+    空间复杂度:
+        O(n)
 */
 include("./Base.php");
 final class mergeSort1 extends Base
