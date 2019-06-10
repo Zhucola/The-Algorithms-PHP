@@ -27,6 +27,17 @@
 */
 class BST{
 	public $root;
+
+	//静态获取节点个数
+	public static function getSize($node){
+    	if($node == null){
+    		return 0;
+    	}
+    	$left = self::getSize($node->left);
+    	$right = self::getSize($node->right);
+    	return 1+$left+$right;
+    }
+
 	public function size($node = null){
 		if($node == null){
 			return $this->doSize($this->root);
@@ -162,6 +173,39 @@ class BST{
         $this->print_tmp[$node->key] = $node->val;
         return $this->print_tmp;
     }
+
+    //二叉树翻转
+    public function invertTree(){
+    	$this->root = $this->doInvertTree($this->root);
+    }
+    private function doInvertTree($node){
+    	if($node == null){
+    		return null;
+    	}
+    	$node->left = $this->doInvertTree($node->left);
+    	$node->right = $this->doInvertTree($node->right);
+    	$tmp = $node->left;
+    	$node->left = $node->right;
+    	$node->right = $tmp;
+    	return $node;
+    }
+    //二叉树合并
+    public static function mergeBST($t1,$t2){
+    	$root = null;
+    	$res = self::doMergeBST($t1,$t2,$root);
+    	print_r($root);
+    }
+    private static function doMergeBST($t1,$t2,&$root){
+        if($t1!=null && $t2!=null){
+        	$root = new Node($t1->key+$t2->key,$t1->val+$t2->val,1);
+        	$root->left = self::doMergeBST($t1->left,$t2->left,$root);
+        	$root->right = self::doMergeBST($t1->right,$t2->right,$root);
+        	$root->N = self::getSize($root);
+        	return;
+        }else{
+        	return $t1?$t1:$t2;
+        }
+    }
 }
 class Node{
 	public $key; //键
@@ -177,8 +221,14 @@ class Node{
 }
 $obj = new BST();
 $obj->put(1,1);
+$obj->put(3,3);
 $obj->put(2,2);
-$obj->put(3,123);
-$obj->put(4,4);
-var_dump($obj->get(3));
-var_dump($obj->size());
+$obj->put(8,8);
+$obj->put(10,10);
+$a = new BST();
+$a->put(9,9);
+$a->put(7,7);
+$a->put(6,6);
+$a->put(1,1);
+$a->put(8,8);
+BST::mergeBST($obj->root,$a->root);
