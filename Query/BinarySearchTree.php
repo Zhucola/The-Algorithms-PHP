@@ -213,6 +213,7 @@ $obj->put(1,1);
 $obj->put(3,3);
 $obj->put(2,2);
 $obj->put(8,8);
+$obj->put(10,10);
 $a = new BST();
 $a->put(9,9);
 $a->put(7,7);
