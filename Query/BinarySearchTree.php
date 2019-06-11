@@ -54,6 +54,7 @@ class BST{
 		}
 	}
 
+	//添加节点
 	public function put($key,$val){
 		$this->root = $this->doPut($this->root,$key,$val);
 	}
@@ -74,6 +75,7 @@ class BST{
 		return $node;
 	}
 
+	//获取key对应的值
 	public function get($key){
 		return $this->doGet($this->root,$key);
 	}
@@ -90,6 +92,7 @@ class BST{
 			return $node->val;
 		}
 	}
+
 	//求树的深度
 	public function getMaxDepth($node = null ){
 		if($node == null){
@@ -98,6 +101,7 @@ class BST{
 			return $this->doGetMaxDepth($node);
 		}
 	}
+
 	private function doGetMaxDepth($node){
 		if($node == null){
 			return 0;
@@ -107,10 +111,12 @@ class BST{
 			return 1+max($left,$right);
 		}
 	}
+
 	//找最小的键
 	public function min(){
 		return $this->doMin($this->root)->val;
 	}
+
 	private function doMin($node){
 		if($node->left == null){
 			return $node;
@@ -189,7 +195,7 @@ class BST{
     	$node->right = $tmp;
     	return $node;
     }
-    //二叉树合并
+    //合并两个二叉树
     public static function mergeBST($t1,$t2){
     	$root = null;
     	$res = self::doMergeBST($t1,$t2,$root);
@@ -205,6 +211,62 @@ class BST{
         }else{
         	return $t1?$t1:$t2;
         }
+    }
+
+    //查找排名为第$key个的键的值
+    public function select($k){
+    	return $this->doSelect($this->root,$k);
+    }
+    private function doSelect($node,$k){
+    	if($node == null){
+    		return null;
+    	}
+    	$t = 0;
+    	if($node->left != null){
+    		$t = $this->size($node->left); //size方法有bug
+    	}
+    	if($t>$k){
+    		return $this->doSelect($node->left,$k);
+    	}elseif($t<$k){
+    		return $this->doSelect($node->right,$k-$t-1);
+    	}else{
+    		return $node;
+    	}
+    }
+    public function rank($key){
+    	return $this->doRank($this->root,$key);
+    }
+    private function doRank($node,$key){
+    	if($node == null){
+    		return 0;
+    	}
+    	if($key < $node->key){
+    		return $this->doRank($node->left,$key);
+    	}elseif($key > $node->key){
+    		$t = 0;
+    		if($node->left != null){
+    			$t = $this->size($node->left);
+    		}
+    		return 1+$t + $this->doRank($node->right,$key);
+    	}else{
+    		$t = 0;
+    		if($node->left != null){
+    			$t = $this->size($node->left);
+    		}
+    		return $t;
+    	}
+    }
+    //删除最小的键
+    public function deleteMin(){
+    	$this->root = $this->doDeleteMin($this->root);
+    }
+    private function doDeleteMin($node){
+    	if($node->left == null){
+    		return $node->right;
+    	}
+    	$node->left = $this->doDeleteMin($node->left);
+    	$node->N = $this->size($node->left) + $this->size($node->right) + 1;
+    	return $node;
     }
 }
 class Node{
@@ -225,10 +287,7 @@ $obj->put(3,3);
 $obj->put(2,2);
 $obj->put(8,8);
 $obj->put(10,10);
-$a = new BST();
-$a->put(9,9);
-$a->put(7,7);
-$a->put(6,6);
-$a->put(1,1);
-$a->put(8,8);
-BST::mergeBST($obj->root,$a->root);
+$obj->put(0,0);
+$obj->deleteMin();
+var_dump($obj->select(0));
+var_dump($obj->rank(101));
