@@ -34,8 +34,47 @@ function search2(Array $arr,$index){
 		}
 	}
 }
-//给定一个升序排列的自然数数组，数组中包含重复数字，例如：[1,2,2,3,4,4,4,5,6,7,7]。问题：给定任意自然数，对数组进行二分查找，返回数组正确的位置，给出函数实现。注：连续相同的数字，返回第一个匹配位置还是最后一个匹配位置，由函数传入参数决定
-//比较相等(相等用0表示，大于为1，小于为-1)，但是flag = 1，则返回纠正后的比较结果为1，需要移动二分查找的high到mid，继续二分(反之，若flag = 0，则返回纠正后的结果为-1，需要移动二分查找的low到mid，继续二分)
+//给定一个升序数组，数组可以有重复元素，找到最左的元素下标
+function search_find1(Array $arr,$index){
+	$right = count($arr);
+	$left = 0;
+	while($left<=$right){
+		$center = (int)(floor($right+$left)/2);
+		if(!isset($arr[$center])){
+			return null;
+		}
+		if($arr[$center] >= $index){ //降序的话就是<=
+			$right = $center - 1;
+		}else{
+			$left = $center + 1;
+		}
+	}
+	if($left < count($arr) && $arr[$left] == $index){
+		return $left;
+	}
+	return null;
+}
+//给定一个升序数组，数组可以有重复元素，找到最右的元素下标(有bug，在[1,1]下找1会null)
+function search_find2(Array $arr,$index){
+	$right = count($arr);
+	$left = 0;
+	while($left<=$right){
+		$center = (int)(floor($right+$left)/2);
+		if(!isset($arr[$center])){
+			return null;
+		}
+		if($arr[$center] <= $index){
+			$left = $center + 1;
+		}else{
+			$right = $center - 1;
+		}
+	}
+	if($right < count($arr) && $arr[$right] == $index){
+		return $right;
+	}
+	return null;
+}
+//https://www.cnblogs.com/luoxn28/p/5767571.html
 $tmp = [];
 for($i=0;$i<100000;$i++){
 	$tmp[] = $i;
