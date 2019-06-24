@@ -73,10 +73,11 @@ class SinglyLinkedList{
 		return true;
 	}
 	//删除链表中的指定位置
+	//如果是1->2->3，deleteNth(1)为2->3
 	public function deleteNth($position){
-		if($position < 0 || $position > $this->count-1){
+		if($position < 1 || $position > $this->count){
 			return false;
-		}elseif($position == 0){
+		}elseif($position == 1){
 			$this->deleteHead();
 		}else{
 			$current = $this->head;
