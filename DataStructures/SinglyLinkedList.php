@@ -109,21 +109,7 @@ class SinglyLinkedList{
 	}
 	//找到环的入口
 	public function findLoopStart(){
-		$hasLoop = false;
-		$slow = $this->head;
-		$fast = $this->head;
-		if($fast == null){
-			return false;
-		}
-		while($fast->next != null && $fast->next->next != null){
-			$slow = $slow->next;
-			$fast = $fast->next->next;
-			if($slow == $fast){
-				$hasLoop = true;
-				break;
-			}
-		}
-		if($hasLoop){
+		if($this->hasLoop()){
 			$start = $this->head;
 			while($start != $slow){
 				$start = $start->next;
