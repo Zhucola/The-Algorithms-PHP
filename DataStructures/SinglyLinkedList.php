@@ -54,22 +54,22 @@ class SinglyLinkedList{
 		return $res;
 	}
 	//向链表中的指定位置插入元素
-	public function insertNth($data,$position): bool{
-		if($position < 0 || $position > $this->count){
-			return false;
-		}elseif($position == 0){
+	//如链表为1->2->3，执行insertNth(11,1);链表为11->1->2->3
+	public function insertNth($data,$position){
+		if($position == 1){
 			$this->insertHead($data);
-			return true;
+		}elseif($position < 1 || $position > $this->count+1){
+			return false;
 		}else{
 			$tmp = new Node($data);
 			$node = $this->head;
-			for($i=0;$i<$position-1;$i++){
+			for($i=0;$i<$position-2;$i++){
 				$node = $node->next;
 			}
 			$tmp->next = $node->next;
 			$node->next = $tmp;
+			$this->count++;
 		}
-		$this->count++;
 		return true;
 	}
 	//删除链表中的指定位置
