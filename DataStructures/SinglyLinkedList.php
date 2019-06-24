@@ -142,7 +142,7 @@ class SinglyLinkedList{
 			while ($start != null) {
 				$start = $start->next;
 				$length++;
-				if($start == $tmp){
+				if($start === $tmp){
 					return $length;
 				}
 			}
@@ -160,7 +160,7 @@ class SinglyLinkedList{
 		while($fast->next != null && $fast->next->next != null){
 			$slow = $slow->next;
 			$fast = $fast->next->next;
-			if($slow == $fast){
+			if($slow === $fast){
 				return true;
 			}
 		}
@@ -169,12 +169,10 @@ class SinglyLinkedList{
 	//删除排序链表中的重复元素
 	public function deleteDuplicates(){
 		$tmp = $this->head;
-		while($tmp != null){
-			if($tmp->next == null){
-				break;
-			}
+		while($tmp->next!= null){
 			if($tmp->data == $tmp->next->data){
 				$tmp->next = $tmp->next->next;
+				$this->count--;
 			}else{
 				$tmp = $tmp->next;
 			}
@@ -200,16 +198,33 @@ class SinglyLinkedList{
 	}
 	//将第二个链表的头指向第一个链表的尾，然后判断是否有环
 	public static function isJoinNoLoop2(Node $node1,Node $node2){
-		
+		$tmp = $node1;
+		while($tmp->next != null){
+			$tmp = $tmp->next;
+		}
+		//将第二个链表的头指向第一个链表的尾
+		$tmp->next = $node2;
+		$fast = $slow = $tmp;
+		if($fast == null){
+			return false;
+		}
+		while($fast->next != null && $fast->next->next != null){
+			$slow = $slow->next;
+			$fast = $fast->next->next;
+			if($slow === $fast){
+				return true;
+			}
+		}
+		return false;
 	}
 	//两个链表都有环，如果环入口相同则相交点在入口点前(只需计算着两个链表到入口点部分长度之差，然后用长的部分减去差，再同时与短的部分同步前进，如果节点相同，则为相交点)，如果不同则相交点是任意两个入口点
 	public static function bothLoop(Node $node1,Node $node2){
 		$start1 = self::findLoopStartStatic($node1);
 		$start2 = self::findLoopStartStatic($node2);
-		if($start1!==$start2){
-			return [$start1,$start2];
+		if($start1===$start2){
+			
 		}else{
-
+			return [$start1,$start2];
 		}
 	}
 	private static function findLoopStartStatic(Node $node){
@@ -305,7 +320,7 @@ class SinglyLinkedList{
 			$fast = $fast->next;
 			$slow = $slow->next;
 		}
-		return $slow->data;
+		return $slow;
 	}
 	//合并两个有序的单链表，合并之后还是有序
 	public static function mergeLinkList(Node $node1,Node $node2){
@@ -383,14 +398,18 @@ class Node{
 }
 $s1 = new SinglyLinkedList();
 $s2 = new SinglyLinkedList();
+$common = new SinglyLinkedList();
+$s1->insertHead(8);
+$s1->insertHead(6);
 $s1->insertHead(4);
-$s1->insertHead(3);
-$s1->insertHead(2);
 $s1->insertHead(1);
-$s1->insertHead(1);
-$s1->deleteDuplicates();
-echo $s1;die;
+$common->insertHead(1);
+$common->insertHead(9);
+$common->insertHead(10);
+$s1->addNodeToTail($common->head);
 $s2->insertHead(3);
 $s2->insertHead(2);
 $s2->insertHead(1);
-$s1->addNodeToTail($s2->head);
+$s2->addNodeToTail($common->head);
+$res = SinglyLinkedList::isJoinNoLoop2($s1->head,$s2->head);
+var_dump($res);
