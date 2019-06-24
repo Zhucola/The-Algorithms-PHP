@@ -109,7 +109,21 @@ class SinglyLinkedList{
 	}
 	//找到环的入口
 	public function findLoopStart(){
-		if($this->hasLoop()){
+		$hasLoop = false;
+		$slow = $this->head;
+		$fast = $this->head;
+		if($fast == null){
+			return false;
+		}
+		while($fast->next != null && $fast->next->next != null){
+			$slow = $slow->next;
+			$fast = $fast->next->next;
+			if($slow == $fast){
+				$hasLoop = true;
+				break;
+			}
+		}
+		if($hasLoop){
 			$start = $this->head;
 			while($start != $slow){
 				$start = $start->next;
@@ -166,7 +180,100 @@ class SinglyLinkedList{
 			}
 		}
 	}
-	//判断两个单链表相交的第一个交点，需要考虑环的可能
+	//在两个链表无环的情况环判断是否相交
+	//如果连个链表相交，那么两个链表就会呈Y型，只要判断最后一个节点是不是相等就行
+	//1->2->3
+	//       \   
+	//         9->10->11
+	//   4->8/
+	public static function isJoinNoLoop1(Node $node1,Node $node2){
+		while($node1->next != null){
+			$node1 = $node1->next;
+		}
+		while($node2->next != null){
+			$node2 = $node2->next;
+		}
+		if($node1 === $node2){
+			return true;
+		}
+		return false;
+	}
+	//将第二个链表的头指向第一个链表的尾，然后判断是否有环
+	public static function isJoinNoLoop2(Node $node1,Node $node2){
+		
+	}
+	//两个链表都有环，如果环入口相同则相交点在入口点前(只需计算着两个链表到入口点部分长度之差，然后用长的部分减去差，再同时与短的部分同步前进，如果节点相同，则为相交点)，如果不同则相交点是任意两个入口点
+	public static function bothLoop(Node $node1,Node $node2){
+		$start1 = self::findLoopStartStatic($node1);
+		$start2 = self::findLoopStartStatic($node2);
+		if($start1!==$start2){
+			return [$start1,$start2];
+		}else{
+
+		}
+	}
+	private static function findLoopStartStatic(Node $node){
+		$hasLoop = false;
+		$slow = $fast = $node;
+		if($fast == null){
+			return false;
+		}
+		while($fast->next != null && $fast->next->next != null){
+			$slow = $slow->next;
+			$fast = $fast->next->next;
+			if($slow == $fast){
+				$hasLoop = true;
+				break;
+			}
+		}
+		if($hasLoop){
+			$start = $this->head;
+			while($start != $slow){
+				$start = $start->next;
+				$slow = $slow->next;
+			}
+			return $start;
+		}else{
+			return false;
+		}
+	}
+	//找到两个有交点的链表的交点
+	public static function getFirstJoinNode(Node $node1,Node $node2){
+		$tmp1 = $node1;
+		$tmp2 = $node2;
+		$length1 = $length2 = 0;
+		while($tmp1->next != null){
+			$length1++;
+			$tmp1 = $tmp1->next;
+		}
+		while($tmp2->next != null){
+			$length2++;
+			$tmp2 = $tmp2->next;
+		}
+		if($length1>$length2){
+			$tmp = $node1;
+			for($i=0;$i<$length1-$length2;$i++){
+				$tmp = $tmp->next;
+			}
+			while($tmp->next!=null && $node2->next!=null){
+				$tmp = $tmp->next;
+				$node2=$node2->next;
+				if($tmp===$node2){
+					return $tmp;
+				}
+			}
+		}else{
+			$tmp = $node2;
+			for($i=0;$i<$length2-$length1;$i++){
+				$tmp = $tmp->next;
+			}
+			$tmp = $tmp->next;
+			$node1=$node1->next;
+			if($tmp===$node1){
+				return $tmp;
+			}
+		}
+	}
 
 	//链表翻转
 	public function reverse(): void{
@@ -250,7 +357,7 @@ class SinglyLinkedList{
 		$echo = rtrim($echo,"->");
 		echo $echo;
 	}
-	//删除一个给定的节点，该节点在链表中，时间复杂度O(1) http://eiptech.aspirecn.com/default.aspx
+	//删除一个给定的节点，该节点在链表中，时间复杂度O(1)
 	public static function deleteNode(Node $head,Node $node){
 		if($node->next != null){//删除的不是尾节点
 			$node->data = $node->next->data;
