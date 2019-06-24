@@ -12,10 +12,14 @@ class SinglyLinkedList{
 	//向链表尾部添加新节点
 	public function addNodeToTail(Node $node,$checkLoop = false){
 		$current = $this->head;
-		while($current->next != null){
-			$current = $current->next;
+		if($current == null){//在链表为空的时候
+			$this->head = $node;
+		}else{
+			while($current->next != null){
+				$current = $current->next;
+			}
+			$current->next = $node;
 		}
-		$current->next = $node;
 		if($checkLoop && $this->hasLoop()){
 			$current->next = null;
 		}else{
