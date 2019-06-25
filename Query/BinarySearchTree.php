@@ -265,9 +265,36 @@ class BST{
     		return $node->right;
     	}
     	$node->left = $this->doDeleteMin($node->left);
-    	$node->N = $this->size($node->left) + $this->size($node->right) + 1;
+    	$node->N = $this->doSize($node->left) + $this->doSize($node->right) + 1;
     	return $node;
     }
+    //删除二叉树的key对应的节点
+    public function delete($key){
+        $this->root = $this->doDelete($this->root,$key);
+    }
+    private function doDelete($node,$key){
+        if($node == null){
+            return null;
+        }
+        if($node->key>$key){
+            $node->left = $this->doDelete($node->left,$key);
+        }elseif($node->key<$key){
+            $node->right = $this->doDelete($node->right,$key);
+        }else{
+            if($node->right == null){
+                return $node->left;
+            }
+            if($node->left == null){
+                return $node->right;
+            }
+            $t = $node;
+            $node = $this->doMin($t->right);
+            $node->right = $this->doDeleteMin($t->right);
+            $node->left = $t->left;
+        }
+        $node->N = $this->doSize($node->left) + $this->doSize($node->right) + 1;
+        return $node;
+    } 
 }
 class Node{
 	public $key; //键
