@@ -25,6 +25,31 @@
 	  	A是E的左子节点，A和R的父节点是E，A和C是比E小的键，R和H是比E大的键
 	  	以x节点为根的子树的节点总数
 	  		size(x) = size(x.left) + size(x.right) + 1  size方法会将空链接的值当成0
+        序号为0的节点是根，左子节点是2n+1，右子节点是2n+2
+
+    二叉搜索树(Binary Search Tree):
+        它或者是一棵空树，或者是具有下列性质的二叉树
+            若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值
+            若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值
+            它的左、右子树也分别为二叉搜索树
+
+    满二叉树1:
+        深度为k，节点数是2^k-1，节点一定是一个奇数，第i层上的节点为2^(i-1)，最后一层的节点为2^(k-1)
+                                    5
+                                    |
+                    ---------------------------------
+                    3                               8
+                    |                               |
+            ------------------                ---------------
+            1                4                7             10
+    完全二叉树
+        从根结点到倒数第二层满足完美二叉树,最后一层可以不完全填充，其叶子结点都靠左对齐
+          1
+         / \
+        2   3
+       / \ 
+      4   5
+
 */
 class BST{
 	public $root;
@@ -218,13 +243,14 @@ class BST{
     public function select($k){
     	return $this->doSelect($this->root,$k);
     }
+
     private function doSelect($node,$k){
     	if($node == null){
     		return null;
     	}
     	$t = 0;
     	if($node->left != null){
-    		$t = $this->size($node->left); //size方法有bug
+    		$t = $this->doSize($node->left);
     	}
     	if($t>$k){
     		return $this->doSelect($node->left,$k);
@@ -295,7 +321,42 @@ class BST{
         }
         $node->N = $this->doSize($node->left) + $this->doSize($node->right) + 1;
         return $node;
-    } 
+    }
+    //判断是否是满二叉树
+    public function isFullBST(){
+        $depth = $this->getMaxDepth();
+        $N = $this->size();
+        $fullN = pow(2,$depth) - 1;
+        if($fullN == $N){
+            return true;
+        }
+        return false;
+    }
+    //判断是否是完全二叉树
+    public function isCompleteBST(){
+        if($this->root == null){
+            return false;
+        }
+        $tmp = [$this->root];//模拟队列
+        $flag = false;
+        while(!empty($tmp)){
+            $node = array_shift($tmp); //移除最开头的元素
+            $left = $node->left;
+            $right = $node->right;
+            if(($right!=null && $left==null) || ($flag && ($right!=null ||$left!=null ))){
+                return false;
+            }
+            if($left!=null){
+                array_push($tmp,$left);
+            }
+            if($right!=null){
+                array_push($tmp,$right);
+            }else{
+                $flag = true;
+            }
+        }
+        return true;
+    }
 }
 class Node{
 	public $key; //键
