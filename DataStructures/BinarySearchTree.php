@@ -296,6 +296,17 @@ class BST{
         $node->N = $this->doSize($node->left) + $this->doSize($node->right) + 1;
         return $node;
     }
+    //判断是否是满二叉树
+    public function isFullBST(){
+        $depth = $this->getMaxDepth(); //求高度
+        $N = $this->root->N;//求节点数
+        $trueN = row(2,$depth)-1; //如果是满二叉树，那么节点数是2^k-1
+        if($trueN == $N){
+            return true;
+        }
+        return false;
+    }
+    //判断是否是完全二叉树
     public function isCompleteBST(){
         if($this->root == null){
             return false;
