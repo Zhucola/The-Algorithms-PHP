@@ -300,7 +300,7 @@ class BST{
     public function isFullBST(){
         $depth = $this->getMaxDepth(); //求高度
         $N = $this->root->N;//求节点数
-        $trueN = row(2,$depth)-1; //如果是满二叉树，那么节点数是2^k-1
+        $trueN = pow(2,$depth)-1; //如果是满二叉树，那么节点数是2^k-1
         if($trueN == $N){
             return true;
         }
