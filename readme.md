@@ -22,7 +22,7 @@
 * [二分查找]
 * [二叉树查找]
 ## 数据结构
-* [单向链表]
+* [单向链表DataStructures/SinglyLinkedList.php]
   * 向链表头添加元素
   * 向链表尾部添加新节点
   * 删除链表头元素
@@ -42,9 +42,9 @@
   * 在不知道链表长度的情况下，查出倒数第N个节点
   * 合并两个有序的单链表
   * 删除一个给定的节点，该节点在链表中，时间复杂度O(1)
-* [双向链表]
-* [二叉堆]
-* [二叉树]
+* [双向链表DataStructures/DoublyLinkedList.php]
+* [二叉堆DataStructures/Heap.php]
+* [二叉树DataStructures/BinarySearchTree.php]
   * 添加值
   * 获取key对应的值
   * 获取最小key对应的值
