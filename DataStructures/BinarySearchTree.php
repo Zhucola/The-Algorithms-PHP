@@ -295,6 +295,30 @@ class BST{
         }
         $node->N = $this->doSize($node->left) + $this->doSize($node->right) + 1;
         return $node;
+    }
+    public function isCompleteBST(){
+        if($this->root == null){
+            return false;
+        }
+        $tmp = [$this->root];//模拟队列
+        $flag = false;
+        while(!empty($tmp)){
+            $node = array_shift($tmp); //移除最开头的元素
+            $left = $node->left;
+            $right = $node->right;
+            if(($right!=null && $left==null) || ($flag && ($right!=null ||$left!=null ))){
+                return false;
+            }
+            if($left!=null){
+                array_push($tmp,$left);
+            }
+            if($right!=null){
+                array_push($tmp,$right);
+            }else{
+                $flag = true;
+            }
+        }
+        return true;
     } 
 }
 class Node{
