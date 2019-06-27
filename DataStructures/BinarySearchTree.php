@@ -324,10 +324,10 @@ class BST{
     }
     //判断是否是满二叉树
     public function isFullBST(){
-        $depth = $this->getMaxDepth();
-        $N = $this->size();
-        $fullN = pow(2,$depth) - 1;
-        if($fullN == $N){
+        $depth = $this->getMaxDepth(); //求高度
+        $N = $this->root->N;//求节点数
+        $trueN = pow(2,$depth)-1; //如果是满二叉树，那么节点数是2^k-1
+        if($trueN == $N){
             return true;
         }
         return false;
