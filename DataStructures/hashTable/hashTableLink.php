@@ -1,6 +1,13 @@
 <?php
 //拉链法解决冲突
-include("./BaseObj.php");
+interface BaseObj{
+	public function hashing($key);
+	public function insertHash($key,$val);
+	public function deleteHash($key);
+	public function issetHash($key);
+	public function findHash($key);
+	public function displayHashtable();
+}
 class HashTableLink implements BaseObj,ArrayAccess{
 	public $size;
 	public $buckets;
@@ -14,6 +21,7 @@ class HashTableLink implements BaseObj,ArrayAccess{
 	}
 
 	public function hashing($key){
+		return 9;
 		$hash = crc32($key)%$this->size;
 		if($hash<0){//注意不能为负，因为SplFixedArray不能插入负
 			return $hash+$this->size;
@@ -67,34 +75,35 @@ class HashTableLink implements BaseObj,ArrayAccess{
 class LinkedList{
 	public $head;
 	public $size = 0;
-	public function insert($key,$data){
-		$tmp = $this->head;
-		$node = new Node($key,$data);
-		$this->size++;
+	public function insert($key,$val){
+		$node = new Node($key,$val);
 		if($this->head == null){
 			$this->head = $node;
 		}else{
+			//需要遍历链表，防止插入相同的键
+			$current = $this->head;
+			while($current!=null){
+				if($current->key == $key){
+					$current->val = $val;
+					return;
+				}
+				$current = $current->next;
+			}
 			$node->next = $this->head;
 			$this->head = $node;
 		}
+		$this->size++;
 	}
 
 	public function find($key){
-		if($this->size == 0){
-			return null;
-		}else{
-			$current = $this->head;
+		$current = $this->head;
+		while($current!=null){
 			if($current->key == $key){
-				return $current->data;
-			}else{
-				while($current->next!=null){
-					if($current->next->key == $key){
-						return $current->data;
-					}
-					$current = $current->next;
-				}
+				return $current->val;
 			}
+			$current = $current->next;
 		}
+		return false;
 	}
 
 	public function delete($key){
@@ -104,17 +113,16 @@ class LinkedList{
 			$current = $this->head;
 			if($current->key == $key){
 				$this->head = $current->next;
-				$this->size--;
-				return;
 			}else{
 				while($current->next!=null){
 					if($current->next->key == $key){
 						$current->next = $current->next->next;
-						return;
+						continue;
 					}
 					$current = $current->next;
 				}
 			}
+			$this->size--;
 		}
 	}
 
@@ -130,9 +138,10 @@ class LinkedList{
 					if($current->next->key == $key){
 						return true;
 					}
-					return $current = $current->next;
+					$current = $current->next;
 				}
 			}
+			return false;
 		}
 	}
 
@@ -161,6 +170,5 @@ $obj = new HashTableLink();
 $obj["a"] = 123;
 $obj["b"] = 2;
 $obj["c"] = "c";
-var_dump($obj["b"]);
-unset($obj["c"]);
+$obj["a"] = "88";
 $obj->displayHashtable();
