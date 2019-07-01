@@ -1,13 +1,6 @@
 <?php
 //拉链法解决冲突
-interface BaseObj{
-	public function hashing($key);
-	public function insertHash($key,$val);
-	public function deleteHash($key);
-	public function issetHash($key);
-	public function findHash($key);
-	public function displayHashtable();
-}
+include("./BaseObj.php");
 class HashTableLink implements BaseObj,ArrayAccess{
 	public $size;
 	public $buckets;
@@ -21,7 +14,6 @@ class HashTableLink implements BaseObj,ArrayAccess{
 	}
 
 	public function hashing($key){
-		return 9;
 		$hash = crc32($key)%$this->size;
 		if($hash<0){//注意不能为负，因为SplFixedArray不能插入负
 			return $hash+$this->size;
@@ -149,7 +141,7 @@ class LinkedList{
 		$res = "";
 		$tmp = $this->head;
 		while($tmp!=null){
-			$res.="{$tmp->data}->";
+			$res.="{$tmp->val}->";
 			$tmp=$tmp->next;
 		}
 		$res = rtrim($res,"->");
@@ -158,11 +150,11 @@ class LinkedList{
 }
 class Node{
 	public $key;
-	public $data;
+	public $val;
 	public $next;
-	public function __construct($key,$data){
+	public function __construct($key,$val){
 		$this->key = $key;
-		$this->data = $data;
+		$this->val = $val;
 	}
 }
 
@@ -171,4 +163,8 @@ $obj["a"] = 123;
 $obj["b"] = 2;
 $obj["c"] = "c";
 $obj["a"] = "88";
+for($i=0;$i<30000;$i++){
+	$obj[mt_rand(-10000,10000)] = mt_rand(-10000,10000);
+}
+var_dump($obj[189]);
 $obj->displayHashtable();
