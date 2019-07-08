@@ -4,6 +4,8 @@ include("./BaseObj.php");
 class HashTableLink implements BaseObj,ArrayAccess{
 	public $size;
 	public $buckets;
+	public $used;
+	private $load_factor;//负载因子
 
 	public function __construct($size = 33){
 		$this->buckets = new SplFixedArray($size);
@@ -48,6 +50,11 @@ class HashTableLink implements BaseObj,ArrayAccess{
 		}
 	}
 
+	//获取负载因子
+    public function getLoadFactor(){
+        return number_format($this->used/$this->size,2);
+    }
+    
     public function offsetExists($key){
     	return $this->issetHash($key);
     }

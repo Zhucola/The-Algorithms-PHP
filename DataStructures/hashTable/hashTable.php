@@ -3,7 +3,9 @@
 include("./BaseObj.php");
 class HashTable implements BaseObj,ArrayAccess{
 	public $size;
-	public $buckets;
+	public $buckets; //槽
+    public $used = 0; //已经使用的节点
+    private $load_factor;//负载因子
 	public function __construct($size = 33){
 		$this->size = $size;
 		//SplFixedArray是一个不会根据key做hash的数组
@@ -22,6 +24,9 @@ class HashTable implements BaseObj,ArrayAccess{
 	//添加
 	public function insertHash($key, $value){
         $index = $this->hashing($key);
+        if(!isset($this->buckets[$index])){
+            $this->used++;
+        }
         $this->buckets[$index] = $value;
         return true;
     }
@@ -37,6 +42,7 @@ class HashTable implements BaseObj,ArrayAccess{
     public function deleteHash($key){
     	$index = $this->hashing($key);
         if(isset($this->buckets[$index])){
+            $this->used--;
             unset($this->buckets[$index]);
             return true;
         }
@@ -53,6 +59,11 @@ class HashTable implements BaseObj,ArrayAccess{
             return true;
         }
         return false;
+    }
+
+    //获取负载因子
+    public function getLoadFactor(){
+        return number_format($this->used/$this->size,2);
     }
 
     public function offsetExists($key){
@@ -80,3 +91,4 @@ unset($obj["a"]);
 var_dump($obj["a"]);
 $res = $obj->displayHashtable();
 var_dump($res);
+var_dump($obj->getLoadFactor());
