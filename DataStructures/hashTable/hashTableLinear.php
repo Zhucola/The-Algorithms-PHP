@@ -10,7 +10,6 @@
 */
 class hashTableLinear{
 	public $size;
-	public $buckets;
 	public $keys;
 	public $vals;
 	public $used = 0;
@@ -68,6 +67,30 @@ class hashTableLinear{
 		}while($this->keys[$hash]!=null);
 		return false;
 	}
+
+	//直接将该键所在位置设置为null是不行的，因为会是的在此位置之后的元素无法被查找到
+	public function deleteHash($key){
+		$start = $hash = $this->hashing($key);
+		while($this->keys[$hash]!=$key){
+			$hash = ($hash+1)%$this->size;
+			if($hash == $start){
+				return false;  //防止死循环
+			}
+		}
+		$this->keys[$hash] = null;
+		$this->vals[$hash] = null;
+		$hash = ($hash+1)%$this->size;
+		while($this->keys[$hash]!=null){
+			$key = $this->keys[$hash];
+			$val = $this->vals[$hash];
+			$this->keys[$hash] = null;
+			$this->vals[$hash] = null;
+			$this->used--;
+			$this->insertHash($key,$val);
+			$hash = ($hash+1)%$this->size;
+		}
+		$this->used--;
+	}
 }
 $obj = new hashTableLinear();
 $obj->insertHash("a",1);
@@ -78,5 +101,7 @@ $obj->insertHash("e",5);
 $obj->insertHash("f",6);
 $obj->insertHash("g",7);
 $obj->insertHash("h",8);
+$obj->deleteHash("cc");
 var_dump($obj->findHash("ga"));
+var_dump($obj->used);
 var_dump($obj->keys);
