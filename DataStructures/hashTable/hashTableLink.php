@@ -4,7 +4,7 @@ include("./BaseObj.php");
 class HashTableLink implements BaseObj,ArrayAccess{
 	public $size;
 	public $buckets;
-	public $used;
+	public $used = 0;
 	private $load_factor;//负载因子
 
 	public function __construct($size = 33){
@@ -25,12 +25,18 @@ class HashTableLink implements BaseObj,ArrayAccess{
 
 	public function insertHash($key,$val){
 		$hash = $this->hashing($key);
-		$this->buckets[$hash]->insert($key,$val);
+		$res = $this->buckets[$hash]->insert($key,$val);
+		if($res){
+			$this->used++;
+		}
 	}
 
 	public function deleteHash($key){
 		$hash = $this->hashing($key);
-		$this->buckets[$hash]->delete($key);
+		$res = $this->buckets[$hash]->delete($key);
+		if($res){
+			$this->used--;
+		}
 	}
 
 	public function issetHash($key){
@@ -54,7 +60,7 @@ class HashTableLink implements BaseObj,ArrayAccess{
     public function getLoadFactor(){
         return number_format($this->used/$this->size,2);
     }
-    
+
     public function offsetExists($key){
     	return $this->issetHash($key);
     }
@@ -84,7 +90,7 @@ class LinkedList{
 			while($current!=null){
 				if($current->key == $key){
 					$current->val = $val;
-					return;
+					return false;
 				}
 				$current = $current->next;
 			}
@@ -92,6 +98,7 @@ class LinkedList{
 			$this->head = $node;
 		}
 		$this->size++;
+		return true;
 	}
 
 	public function find($key){
@@ -107,21 +114,28 @@ class LinkedList{
 
 	public function delete($key){
 		if($this->size == 0){
-			return;
+			return false;
 		}else{
+			$hasDelete = false;
 			$current = $this->head;
 			if($current->key == $key){
 				$this->head = $current->next;
+				$hasDelete = true;
 			}else{
 				while($current->next!=null){
 					if($current->next->key == $key){
 						$current->next = $current->next->next;
+						$hasDelete = true;
 						continue;
 					}
 					$current = $current->next;
 				}
 			}
-			$this->size--;
+			if($hasDelete){
+				$this->size--;
+				return true;
+			}
+			return false;
 		}
 	}
 
@@ -170,8 +184,8 @@ $obj["a"] = 123;
 $obj["b"] = 2;
 $obj["c"] = "c";
 $obj["a"] = "88";
+unset($obj["b"]);
 for($i=0;$i<30000;$i++){
 	$obj[mt_rand(-10000,10000)] = mt_rand(-10000,10000);
 }
-var_dump($obj[189]);
 $obj->displayHashtable();
