@@ -6,7 +6,7 @@
 		1.命中，该位置的键和被查找的键相同
 		2.未命中，键为空
 		3.继续查找，该位置的键和被查找的键不同
-	在继续查找的过程中，如果到底数组结尾时候这回数组的开头，知道找到该键或者遇到一个空元素
+	在继续查找的过程中，如果到底数组结尾时候这回数组的开头，直到找到该键或者遇到一个空元素
 */
 class hashTableLinear{
 	public $size;
@@ -21,7 +21,6 @@ class hashTableLinear{
 	}
 
 	public function hashing($key){
-		return 1;
 		$hash = crc32($key)%$this->size;
 		if($hash<0){//注意不能为负，因为SplFixedArray不能插入负
 			return $hash+$this->size;
@@ -33,12 +32,12 @@ class hashTableLinear{
 		$start = $hash = $this->hashing($key);
 		$loop = false;//是否已经走了一圈了
 		do{
+			if($loop){//已经走了一圈了，但是还没找到可用的空位置
+				return false;
+			}
 			if($this->keys[$hash] == $key){
 				$this->vals[$hash] = $val;
 				return true;
-			}
-			if($loop){//已经走了一圈了，但是还没找到可用的空位置
-				return false;
 			}
 			$hash=($hash+1)%$this->size;
 			if($hash == $start){

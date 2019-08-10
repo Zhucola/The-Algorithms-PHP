@@ -5,7 +5,6 @@ class HashTableLink implements BaseObj,ArrayAccess{
 	public $size;
 	public $buckets;
 	public $used = 0;
-	private $load_factor;//负载因子
 
 	public function __construct($size = 33){
 		$this->buckets = new SplFixedArray($size);
@@ -24,6 +23,9 @@ class HashTableLink implements BaseObj,ArrayAccess{
 	}
 
 	public function insertHash($key,$val){
+		if($this->getLoadFactor()>=1.5){
+			$this->resize(2*$this->size);
+		}
 		$hash = $this->hashing($key);
 		$res = $this->buckets[$hash]->insert($key,$val);
 		if($res){
@@ -32,6 +34,9 @@ class HashTableLink implements BaseObj,ArrayAccess{
 	}
 
 	public function deleteHash($key){
+		if($this->getLoadFactor()>0 && $this->getLoadFactor()<=0.5){
+			$this->resize($this->size/2);
+		}
 		$hash = $this->hashing($key);
 		$res = $this->buckets[$hash]->delete($key);
 		if($res){
@@ -55,7 +60,18 @@ class HashTableLink implements BaseObj,ArrayAccess{
 			var_dump($res);
 		}
 	}
-
+	public function resize($size){
+    	$new_HashTableLink = new HashTableLink($size);
+    	for($i=0;$i<$this->size;$i++){
+    		$node_info = $this->buckets[$i]->getAllNodeInfo();
+    		foreach($node_info as $node){
+    			$new_HashTableLink -> insertHash($node[0],$node[1]);
+    		}
+    	}
+    	$this->size = $size;
+    	$this->buckets = $new_HashTableLink->buckets;
+    	$this->used = $new_HashTableLink->used;
+    }
 	//获取负载因子
     public function getLoadFactor(){
         return number_format($this->used/$this->size,2);
@@ -168,6 +184,15 @@ class LinkedList{
 		$res = rtrim($res,"->");
 		return $res;
 	}
+	public function getAllNodeInfo(){
+    	$res = [];
+		$current = $this->head;
+		while($current!=null){
+			$res[] = [$current->key,$current->val];
+			$current = $current->next;
+		}
+    	return $res;
+    }
 }
 class Node{
 	public $key;
