@@ -14,7 +14,7 @@ class hashTableLinear{
 	public $vals;
 	public $used = 0;
 
-	public function __construct($size = 7){
+	public function __construct($size = 4){
 		$this->keys = new SplFixedArray($size);
 		$this->vals = new SplFixedArray($size);
 		$this->size = $size;
@@ -29,31 +29,26 @@ class hashTableLinear{
 	}
 
 	public function insertHash($key,$val){
+		if($this->getLoadFactor()>=1){
+			$this->resize(2*$this->size);
+		}
 		$start = $hash = $this->hashing($key);
-		$loop = false;//是否已经走了一圈了
 		do{
-			if($loop){//已经走了一圈了，但是还没找到可用的空位置
-				return false;
-			}
-			if($this->keys[$hash] == $key){
+			if($this->keys[$hash] === $key){
 				$this->vals[$hash] = $val;
 				return true;
 			}
 			$hash=($hash+1)%$this->size;
-			if($hash == $start){
-				$loop = true;//已经走了一圈了
-			}
 		}while($this->keys[$hash]!=null);
 		$this->keys[$hash] = $key;
 		$this->vals[$hash] = $val;
 		$this->used++;
 	}
-
 	public function findHash($key){
 		$start = $hash = $this->hashing($key);
 		$loop = false;//是否已经走了一圈了
 		do{
-			if($this->keys[$hash] == $key){
+			if($this->keys[$hash] === $key){ //防止 0==null为true
 				return $this->vals[$hash];
 			}
 			if($loop){//已经走了一圈了，但是还没找到
@@ -69,8 +64,11 @@ class hashTableLinear{
 
 	//直接将该键所在位置设置为null是不行的，因为会是的在此位置之后的元素无法被查找到
 	public function deleteHash($key){
+		if($this->getLoadFactor()>0 && $this->getLoadFactor()<=0.5){
+			$this->resize($this->size/2);
+		}
 		$start = $hash = $this->hashing($key);
-		while($this->keys[$hash]!=$key){
+		while($this->keys[$hash]!==$key){
 			$hash = ($hash+1)%$this->size;
 			if($hash == $start){
 				return false;  //防止死循环
@@ -79,7 +77,7 @@ class hashTableLinear{
 		$this->keys[$hash] = null;
 		$this->vals[$hash] = null;
 		$hash = ($hash+1)%$this->size;
-		while($this->keys[$hash]!=null){
+		while($this->keys[$hash]!==null){
 			$key = $this->keys[$hash];
 			$val = $this->vals[$hash];
 			$this->keys[$hash] = null;
@@ -90,17 +88,34 @@ class hashTableLinear{
 		}
 		$this->used--;
 	}
+
+	//获取负载因子
+    public function getLoadFactor(){
+        return number_format($this->used/$this->size,2);
+    }
+
+    public function resize($size){
+    	$new_hashTableLinear = new hashTableLinear($size);
+    	for($i=0;$i<$this->size;$i++){
+    		if($this->keys[$i] != null){
+    			$new_hashTableLinear->insertHash($this->keys[$i],$this->vals[$i]);
+    		}
+    	}
+    	$this->size = $size;
+    	$this->used = $new_hashTableLinear->used;
+    	$this->keys = $new_hashTableLinear->keys;
+    	$this->vals = $new_hashTableLinear->vals;
+    }
 }
 $obj = new hashTableLinear();
-$obj->insertHash("a",1);
-$obj->insertHash("b",2);
-$obj->insertHash("c",3);
-$obj->insertHash("d",4);
-$obj->insertHash("e",5);
-$obj->insertHash("f",6);
-$obj->insertHash("g",7);
-$obj->insertHash("h",8);
-$obj->deleteHash("cc");
-var_dump($obj->findHash("ga"));
+$obj->insertHash(8,1);
+$obj->insertHash(4,2);
+$obj->insertHash(0,0);
+$obj->insertHash(3,3);
+$obj->deleteHash(4);
+$obj->deleteHash(3);
+$obj->deleteHash(0);
+$obj->insertHash(3,3);
+$obj->insertHash(7,7);
 var_dump($obj->used);
 var_dump($obj->keys);
