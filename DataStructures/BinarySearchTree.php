@@ -140,6 +140,9 @@ class BST{
 
 	//找最小的键
 	public function min(){
+        if($this->root == null){
+            return null;
+        }
 		return $this->doMin($this->root)->val;
 	}
 
