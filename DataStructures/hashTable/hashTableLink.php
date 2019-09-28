@@ -142,7 +142,7 @@ class LinkedList{
 					if($current->next->key == $key){
 						$current->next = $current->next->next;
 						$hasDelete = true;
-						continue;
+						break;
 					}
 					$current = $current->next;
 				}
